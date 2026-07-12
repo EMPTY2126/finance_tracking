@@ -1,4 +1,8 @@
 package finance_management.repo;
 
-public interface TransactionRepo {
+import finance_management.model.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TransactionRepo extends JpaRepository<Transaction, Long> {
+
 }

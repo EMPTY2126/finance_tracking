@@ -1,13 +1,19 @@
 package finance_management.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import org.jspecify.annotations.NullMarked;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,8 +73,22 @@ public class User {
         this.email = email;
     }
 
+    @NullMarked
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("USER"));
+    }
+
+    @NullMarked
+    @Override
     public String getPassword() {
         return password;
+    }
+
+    @NullMarked
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     public void setPassword(String password) {

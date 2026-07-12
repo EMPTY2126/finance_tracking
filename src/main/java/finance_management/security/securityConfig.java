@@ -1,5 +1,6 @@
 package finance_management.security;
 
+import finance_management.config.MyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class securityConfig {
    private final UserDetailsService userDetailsService;
 
    @Autowired
-   public securityConfig(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService){
+   public securityConfig(PasswordEncoder passwordEncoder, MyUserDetailService userDetailsService){
        this.passwordEncoder = passwordEncoder;
        this.userDetailsService = userDetailsService;
    }
@@ -55,10 +56,9 @@ public class securityConfig {
     }
 
     @Bean
-    public  authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    public  AuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
-        provider.setUserDetailsService(userDetailsService);
         return provider;
     }
 
@@ -66,6 +66,5 @@ public class securityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig){
         return authConfig.getAuthenticationManager();
     }
-
 
 }
