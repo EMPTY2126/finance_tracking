@@ -10,12 +10,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorBody> userNotFoundException(UserNotFoundException ex){
+        HttpStatus status = ex.getStatus();
         ErrorBody error = new ErrorBody(
-                HttpStatus.NOT_FOUND,
+                status,
                 "User Not Found",
                 ex.getMessage()
         );
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, status);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorBody> exceptionHandler(Exception ex){
+        HttpStatus status = HttpStatus.BAD_GATEWAY;
+        ErrorBody error = new ErrorBody(
+                status,
+                "Something Went Wrong",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(error, status);
     }
 
 }

@@ -2,6 +2,7 @@ package finance_management.controller;
 
 import finance_management.model.User;
 import finance_management.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,8 +16,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user){
-        return authService.verify(user);
+    public String login(@RequestBody User user, HttpServletResponse response){
+        return authService.verify(user, response);
     }
 
     @PostMapping("/register")

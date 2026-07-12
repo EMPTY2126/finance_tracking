@@ -16,7 +16,7 @@ public class JwtService {
 
     private final SecretKey secretKey;
 
-    public JwtService(@Value("{app.jwt.secret}") String secretKey){
+    public JwtService(@Value("${app.jwt.secret}") String secretKey){
         this.secretKey = getInSecretKey(secretKey);
     }
 
@@ -26,7 +26,7 @@ public class JwtService {
     }
 
 
-    public String generateToke(String userEmail){
+    public String generateToken(String userEmail){
         return Jwts.builder()
                 .subject(userEmail)
                 .issuedAt(new Date())
