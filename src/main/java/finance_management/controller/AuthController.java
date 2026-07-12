@@ -1,20 +1,33 @@
 package finance_management.controller;
 
 import finance_management.model.User;
-import finance_management.repo.UserRepo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import finance_management.service.AuthService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
+
+    private final AuthService authService;
+
+    public AuthController(AuthService authService){
+        this.authService = authService;
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user){
+        return authService.verify(user);
+    }
 
     @PostMapping("/register")
     public User registerUser(@RequestBody User user){
-//        return user
+
+
+
+        return authService.registerUser(user);
     }
+
+
 
 
 }

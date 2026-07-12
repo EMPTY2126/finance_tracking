@@ -40,13 +40,15 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String userName, String email, String password, LocalDateTime createdAt, List<Transaction> transactions, List<Budget> budgets) {
+    public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.createdAt = createdAt;
-        this.transactions = transactions;
-        this.budgets = budgets;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -94,6 +96,8 @@ public class User implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
