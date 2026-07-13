@@ -1,5 +1,7 @@
 package finance_management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import finance_management.enums.Category;
 import jakarta.persistence.*;
 
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "budget")
+@Table(name = "budgets")
 public class Budget {
 
     @Id
@@ -33,6 +35,7 @@ public class Budget {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     public Budget() {

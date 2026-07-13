@@ -1,5 +1,7 @@
 package finance_management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import org.jspecify.annotations.NullMarked;
@@ -31,10 +33,12 @@ public class User implements UserDetails {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Transaction> transactions;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Budget> budgets;
 
     public User() {

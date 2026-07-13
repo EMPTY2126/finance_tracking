@@ -30,7 +30,7 @@ public class JwtService {
         return Jwts.builder()
                 .subject(userEmail)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10))
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 24))
                 .signWith(secretKey)
                 .compact();
     }

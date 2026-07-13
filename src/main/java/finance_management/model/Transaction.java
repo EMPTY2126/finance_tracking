@@ -1,8 +1,11 @@
 package finance_management.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import finance_management.enums.Category;
 import finance_management.enums.TransactionType;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -36,11 +39,13 @@ public class Transaction {
     @Column(name = "transaction_date")
     private LocalDate transactionDate;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     public Transaction() {
@@ -51,8 +56,7 @@ public class Transaction {
                        TransactionType type,
                        Category category,
                        String description,
-                       LocalDate transactionDate,
-                       User user) {
+                       LocalDate transactionDate) {
 
         this.title = title;
         this.amount = amount;
@@ -60,13 +64,21 @@ public class Transaction {
         this.category = category;
         this.description = description;
         this.transactionDate = transactionDate;
-        this.user = user;
     }
 
-    @PrePersist
-    public void prePersist(){
-        createdAt = LocalDateTime.now();
+    public void updateFrom(Transaction transaction) {
+        this.title = transaction.getTitle();
+        this.amount = transaction.getAmount();
+        this.type = transaction.getType();
+        this.category = transaction.getCategory();
+        this.description = transaction.getDescription();
+        this.transactionDate = transaction.getTransactionDate();
     }
+
+//    @PrePersist
+//    public void prePersist(){
+//        createdAt = LocalDateTime.now();
+//    }
 
     public Long getId() {
         return id;
