@@ -75,11 +75,6 @@ public class Transaction {
         this.transactionDate = transaction.getTransactionDate();
     }
 
-//    @PrePersist
-//    public void prePersist(){
-//        createdAt = LocalDateTime.now();
-//    }
-
     public Long getId() {
         return id;
     }
