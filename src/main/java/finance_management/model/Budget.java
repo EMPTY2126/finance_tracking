@@ -1,7 +1,6 @@
 package finance_management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import finance_management.enums.Category;
 import jakarta.persistence.*;
 

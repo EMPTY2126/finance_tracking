@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BudgetRepo extends JpaRepository<Budget, Long> {
-    public List<Budget> findByUserId(Long userId);
+    List<Budget> findByUserId(Long userId);
 }
