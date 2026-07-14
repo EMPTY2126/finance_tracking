@@ -2,10 +2,10 @@ package finance_management.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class InvalidTransactionAmount extends RuntimeException {
+public class InvalidAmount extends RuntimeException {
 
     private HttpStatus httpStatus;
-    public InvalidTransactionAmount(String message, HttpStatus httpStatus) {
+    public InvalidAmount(String message, HttpStatus httpStatus) {
         super(message);
         this.httpStatus = httpStatus;
     }

@@ -2,7 +2,6 @@ package finance_management.controller;
 
 import finance_management.model.Transaction;
 import finance_management.service.TransactionService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,5 +31,9 @@ public class TransactionController {
         return transactionService.getAllTransactions();
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteTransaction(@PathVariable Long id){
+        return transactionService.deleteTransaction(id);
+    }
 
 }

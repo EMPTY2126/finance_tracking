@@ -20,6 +20,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, status);
     }
 
+    @ExceptionHandler(BudgetNotFoundException.class)
+    public ResponseEntity<ErrorBody> userNotFoundException(BudgetNotFoundException ex){
+        HttpStatus status = ex.getStatus();
+        ErrorBody error = new ErrorBody(
+                status,
+                "Invalid Budget operation",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(error, status);
+    }
+
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<ErrorBody> userNotFoundException(TransactionNotFoundException ex){
         HttpStatus status = ex.getStatus();
@@ -32,8 +43,8 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(InvalidTransactionAmount.class)
-    public ResponseEntity<ErrorBody> invalidTransactionAmount(InvalidTransactionAmount ex){
+    @ExceptionHandler(InvalidAmount.class)
+    public ResponseEntity<ErrorBody> invalidTransactionAmount(InvalidAmount ex){
         HttpStatus status = ex.getHttpStatus();
         ErrorBody error = new ErrorBody(
           status,

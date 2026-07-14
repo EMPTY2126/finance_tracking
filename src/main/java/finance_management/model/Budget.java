@@ -48,6 +48,13 @@ public class Budget {
         this.month = month;
     }
 
+    public void updateBudget(Budget budget){
+        this.category = budget.getCategory();
+        this.monthlyLimit = budget.getMonthlyLimit();
+        this.year = budget.year;
+        this.month = budget.getMonth();
+    }
+
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();

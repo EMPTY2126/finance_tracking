@@ -6,7 +6,7 @@ import finance_management.model.Transaction;
 import finance_management.model.User;
 import finance_management.repo.TransactionRepo;
 import finance_management.repo.UserRepo;
-import finance_management.validations.TransactionValidation;
+import finance_management.validations.AmountValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,27 +15,26 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class TransactionService {
 
     private final UserRepo userRepo;
     private final TransactionRepo transactionRepo;
-    private final TransactionValidation transactionValidation;
+    private final AmountValidation amountValidation;
 
     public TransactionService(
             UserRepo userRepo,
-            TransactionValidation transactionValidation,
+            AmountValidation amountValidation,
             TransactionRepo transactionRepo){
         this.userRepo = userRepo;
         this.transactionRepo = transactionRepo;
-        this.transactionValidation = transactionValidation;
+        this.amountValidation = amountValidation;
 
     }
 
     public Transaction addTransaction(Transaction transaction){
-        transactionValidation.validateTransaction(transaction);
+        amountValidation.validate(transaction);
         String userEmail = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
         User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("Invaild user", HttpStatus.NOT_FOUND));
         transaction.setUser(user);
@@ -51,11 +50,18 @@ public class TransactionService {
 
     @Transactional
     public Transaction updateTransaction(Transaction transaction){
-        transactionValidation.validateTransaction(transaction);
+        amountValidation.validate(transaction);
         Transaction tx = transactionRepo.findById(transaction.getId()).
                 orElseThrow(()-> new TransactionNotFoundException("Transaction not found", HttpStatus.NOT_FOUND));
         tx.updateFrom(transaction);
         return tx;
+    }
+
+    public String deleteTransaction(Long id){
+        Transaction tx = transactionRepo.findById(id).
+                orElseThrow(()-> new TransactionNotFoundException("Transaction not found", HttpStatus.NOT_FOUND));
+        transactionRepo.delete(tx);
+        return "Successfully deleted";
     }
 
 }
