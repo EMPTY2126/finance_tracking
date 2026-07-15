@@ -2,6 +2,7 @@ package finance_management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import finance_management.dto.transaction.TransactionRequest;
 import finance_management.enums.Category;
 import finance_management.enums.TransactionType;
 import jakarta.persistence.*;
@@ -66,13 +67,21 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
-    public void updateFrom(Transaction transaction) {
-        this.title = transaction.getTitle();
-        this.amount = transaction.getAmount();
-        this.type = transaction.getType();
-        this.category = transaction.getCategory();
-        this.description = transaction.getDescription();
-        this.transactionDate = transaction.getTransactionDate();
+    public Transaction(TransactionRequest transactionRequest){
+        this.title = transactionRequest.getTitle();
+        this.amount = transactionRequest.getAmount();
+        this.type = transactionRequest.getType();
+        this.category = transactionRequest.getCategory();
+        this.description = transactionRequest.getDescription();
+    }
+
+    public void updateFrom(TransactionRequest transactionRequest) {
+        this.title = transactionRequest.getTitle();
+        this.amount = transactionRequest.getAmount();
+        this.type = transactionRequest.getType();
+        this.category = transactionRequest.getCategory();
+        this.description = transactionRequest.getDescription();
+//        this.transactionDate = transactionRequest.getTransactionDate();
     }
 
     public Long getId() {
@@ -145,5 +154,20 @@ public class Transaction {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", amount=" + amount +
+                ", type=" + type +
+                ", category=" + category +
+                ", description='" + description + '\'' +
+                ", transactionDate=" + transactionDate +
+                ", createdAt=" + createdAt +
+                ", user=" + user +
+                '}';
     }
 }

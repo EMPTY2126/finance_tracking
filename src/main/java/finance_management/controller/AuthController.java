@@ -1,5 +1,7 @@
 package finance_management.controller;
 
+import finance_management.dto.user.UserRequest;
+import finance_management.dto.user.UserResponse;
 import finance_management.model.User;
 import finance_management.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,15 +18,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user, HttpServletResponse response){
-        return authService.verify(user, response);
+    public String login(@RequestBody UserRequest userRequest, HttpServletResponse response){
+        return authService.verify(userRequest, response);
     }
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody User user){
-
-
-
+    public UserResponse registerUser(@RequestBody UserRequest user){
         return authService.registerUser(user);
     }
 

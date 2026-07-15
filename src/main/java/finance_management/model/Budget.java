@@ -1,6 +1,7 @@
 package finance_management.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import finance_management.dto.budget.BudgetRequest;
 import finance_management.enums.Category;
 import jakarta.persistence.*;
 
@@ -47,11 +48,11 @@ public class Budget {
         this.month = month;
     }
 
-    public void updateBudget(Budget budget){
-        this.category = budget.getCategory();
-        this.monthlyLimit = budget.getMonthlyLimit();
-        this.year = budget.year;
-        this.month = budget.getMonth();
+    public void updateBudget(BudgetRequest budgetRequest){
+        this.category = budgetRequest.getCategory();
+        this.monthlyLimit = budgetRequest.getMonthlyLimit();
+        this.year = budgetRequest.getYear();
+        this.month = budgetRequest.getMonth();
     }
 
     @PrePersist
@@ -113,5 +114,18 @@ public class Budget {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Budget{" +
+                "id=" + id +
+                ", category=" + category +
+                ", monthlyLimit=" + monthlyLimit +
+                ", month=" + month +
+                ", year=" + year +
+                ", createdAt=" + createdAt +
+                ", user=" + user +
+                '}';
     }
 }

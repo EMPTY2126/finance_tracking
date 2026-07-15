@@ -1,5 +1,7 @@
 package finance_management.validations;
 
+import finance_management.dto.budget.BudgetRequest;
+import finance_management.dto.transaction.TransactionRequest;
 import finance_management.exceptions.InvalidAmount;
 import finance_management.model.Budget;
 import finance_management.model.Transaction;
@@ -12,13 +14,13 @@ import java.math.BigDecimal;
 public class AmountValidation {
 
 
-    public void validate(Transaction transaction){
+    public void validate(TransactionRequest transaction){
         if(transaction.getAmount().compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidAmount("Enter a valid amount", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public void validate(Budget budget){
+    public void validate(BudgetRequest budget){
         if(budget.getMonthlyLimit().compareTo(BigDecimal.ZERO) <= 0){
             throw new InvalidAmount("Enter a valid amount", HttpStatus.BAD_REQUEST);
         }

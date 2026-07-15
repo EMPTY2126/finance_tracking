@@ -1,5 +1,7 @@
 package finance_management.controller;
 
+import finance_management.dto.transaction.TransactionRequest;
+import finance_management.dto.transaction.TransactionResponse;
 import finance_management.model.Transaction;
 import finance_management.service.TransactionService;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +19,17 @@ public class TransactionController {
     }
 
     @PostMapping
-    public Transaction addTransaction(@RequestBody Transaction transaction){
+    public TransactionResponse addTransaction(@RequestBody TransactionRequest transaction){
         return transactionService.addTransaction(transaction);
     }
 
-    @PutMapping
-    public Transaction updateTransaction(@RequestBody Transaction transaction){
-        return transactionService.updateTransaction(transaction);
+    @PutMapping("/{id}")
+    public TransactionResponse updateTransaction(@PathVariable Long id,@RequestBody TransactionRequest transaction){
+        return transactionService.updateTransaction(id, transaction);
     }
 
     @GetMapping
-    public List<Transaction> getAllTransactionOfUser(){
+    public List<TransactionResponse> getAllTransactionOfUser(){
         return transactionService.getAllTransactions();
     }
 

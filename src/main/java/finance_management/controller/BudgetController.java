@@ -1,5 +1,7 @@
 package finance_management.controller;
 
+import finance_management.dto.budget.BudgetRequest;
+import finance_management.dto.budget.BudgetResponse;
 import finance_management.model.Budget;
 import finance_management.service.BudgetService;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +19,18 @@ public class BudgetController {
     }
 
     @GetMapping
-    public List<Budget> getAllBudget(){
+    public List<BudgetResponse> getAllBudget(){
         return budgetService.getAllBudgets();
     }
 
     @PostMapping
-    public Budget addBidget(@RequestBody Budget budget){
-        return budgetService.addBudget(budget);
+    public BudgetResponse addBidget(@RequestBody BudgetRequest budgetRequest){
+        return budgetService.addBudget(budgetRequest);
     }
 
-    @PutMapping
-    public Budget updateBudget(@RequestBody Budget budget){
-        return budgetService.updateBudget(budget);
+    @PutMapping("/{id}")
+    public BudgetResponse updateBudget(@PathVariable Long id, @RequestBody BudgetRequest budgetRequest){
+        return budgetService.updateBudget(id, budgetRequest);
     }
 
     @DeleteMapping("/{id}")

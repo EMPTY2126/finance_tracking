@@ -1,7 +1,10 @@
 package finance_management.service;
 
+import finance_management.dto.transaction.TransactionRequest;
+import finance_management.dto.transaction.TransactionResponse;
 import finance_management.exceptions.TransactionNotFoundException;
 import finance_management.exceptions.UserNotFoundException;
+import finance_management.mapper.TransactionMapper;
 import finance_management.model.Transaction;
 import finance_management.model.User;
 import finance_management.repo.TransactionRepo;
@@ -33,28 +36,34 @@ public class TransactionService {
 
     }
 
-    public Transaction addTransaction(Transaction transaction){
-        amountValidation.validate(transaction);
+    public TransactionResponse addTransaction(TransactionRequest transactionRequest){
+        amountValidation.validate(transactionRequest);
         String userEmail = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
         User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("Invaild user", HttpStatus.NOT_FOUND));
+//        Transaction transaction = TransactionMapper.toResponse(transactionRequest);
+        Transaction transaction = TransactionMapper.convertToEntity(transactionRequest);
         transaction.setUser(user);
         transaction.setTransactionDate(LocalDate.now());
-        return transactionRepo.save(transaction);
+        transaction =  transactionRepo.save(transaction);
+        return TransactionMapper.toResponse(transaction);
     }
 
-    public List<Transaction> getAllTransactions(){
+    public List<TransactionResponse> getAllTransactions(){
         String userEmail = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
         User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("Invaild user", HttpStatus.NOT_FOUND));
-        return transactionRepo.findByUserId(user.getId());
+        List<Transaction> transactions = transactionRepo.findByUserId(user.getId());
+        return transactions.stream().
+            map(TransactionMapper::toResponse)
+            .toList();
     }
 
     @Transactional
-    public Transaction updateTransaction(Transaction transaction){
-        amountValidation.validate(transaction);
-        Transaction tx = transactionRepo.findById(transaction.getId()).
+    public TransactionResponse updateTransaction(Long id, TransactionRequest transactionRequest){
+        amountValidation.validate(transactionRequest);
+        Transaction tx = transactionRepo.findById(id).
                 orElseThrow(()-> new TransactionNotFoundException("Transaction not found", HttpStatus.NOT_FOUND));
-        tx.updateFrom(transaction);
-        return tx;
+        tx.updateFrom(transactionRequest);
+        return TransactionMapper.toResponse(tx);
     }
 
     public String deleteTransaction(Long id){

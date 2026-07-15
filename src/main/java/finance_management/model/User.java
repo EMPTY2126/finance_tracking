@@ -1,8 +1,6 @@
 package finance_management.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +31,7 @@ public class User implements UserDetails {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Transaction> transactions;
@@ -49,6 +48,7 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
     }
+
 
     @PrePersist
     public void prePersist() {
@@ -125,5 +125,18 @@ public class User implements UserDetails {
 
     public void setBudgets(List<Budget> budgets) {
         this.budgets = budgets;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", createdAt=" + createdAt +
+                ", transactions=" + transactions +
+                ", budgets=" + budgets +
+                '}';
     }
 }

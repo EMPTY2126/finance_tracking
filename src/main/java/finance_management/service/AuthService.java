@@ -1,6 +1,10 @@
 package finance_management.service;
 
+import finance_management.dto.user.UserRequest;
+import finance_management.dto.user.UserResponse;
 import finance_management.exceptions.UserNotFoundException;
+import finance_management.mapper.TransactionMapper;
+import finance_management.mapper.UserMapper;
 import finance_management.model.User;
 import finance_management.repo.UserRepo;
 import jakarta.servlet.http.Cookie;
@@ -33,20 +37,23 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public User registerUser(User user){
-        Optional<User> userInDb = userRepo.findByEmail(user.getEmail());
+    public UserResponse registerUser(UserRequest userRequest){
+        Optional<User> userInDb = userRepo.findByEmail(userRequest.getEmail());
         if(userInDb.isPresent()){
             throw new UserNotFoundException("User Already Exists try another user email", HttpStatus.NOT_FOUND);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepo.save(user);
+//        User dbUser = new User(user.getUserName(), user.getEmail(), passwordEncoder.encode(user.getPassword()));
+        User user = UserMapper.toEntity(userRequest);
+        user = userRepo.save(user);
+//        return new UserResponse(dbUser.getUserName(), dbUser.getEmail(), dbUser.getCreatedAt());
+        return UserMapper.toResponse(user);
     }
 
-    public String verify(User user, HttpServletResponse response){
+    public String verify(UserRequest userRequest, HttpServletResponse response){
         Authentication auth = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
         if(auth.isAuthenticated()){
-            String token = jwtService.generateToken(user.getEmail());
+            String token = jwtService.generateToken(userRequest.getEmail());
 
             Cookie cookie = new Cookie("jwt", token);
 
