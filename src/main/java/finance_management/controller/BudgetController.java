@@ -38,6 +38,10 @@ public class BudgetController {
         return budgetService.deleteBudget(id);
     }
 
+    @PostMapping("/bulk")
+    public String bulkAddBudgets(@RequestBody List<BudgetRequest> budgetRequests){
+        return budgetService.bulkAddBudget(budgetRequests);
+    }
 
 
 }

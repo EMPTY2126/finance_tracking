@@ -43,8 +43,8 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(InvalidAmount.class)
-    public ResponseEntity<ErrorBody> invalidTransactionAmount(InvalidAmount ex){
+    @ExceptionHandler(InvalidField.class)
+    public ResponseEntity<ErrorBody> invalidTransactionAmount(InvalidField ex){
         HttpStatus status = ex.getHttpStatus();
         ErrorBody error = new ErrorBody(
           status,
