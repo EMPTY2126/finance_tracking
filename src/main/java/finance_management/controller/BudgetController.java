@@ -2,8 +2,10 @@ package finance_management.controller;
 
 import finance_management.dto.budget.BudgetRequest;
 import finance_management.dto.budget.BudgetResponse;
+import finance_management.enums.Category;
 import finance_management.model.Budget;
 import finance_management.service.BudgetService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,8 +21,14 @@ public class BudgetController {
     }
 
     @GetMapping
-    public List<BudgetResponse> getAllBudget(){
-        return budgetService.getAllBudgets();
+    public Page<BudgetResponse> getAllBudget(
+            @RequestParam(required = false)Category category,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        return budgetService.getBudgets(year,month,category,page,size);
     }
 
     @PostMapping
@@ -42,6 +50,5 @@ public class BudgetController {
     public String bulkAddBudgets(@RequestBody List<BudgetRequest> budgetRequests){
         return budgetService.bulkAddBudget(budgetRequests);
     }
-
 
 }

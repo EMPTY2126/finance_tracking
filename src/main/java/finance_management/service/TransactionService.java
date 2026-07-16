@@ -1,5 +1,6 @@
 package finance_management.service;
 
+import finance_management.dto.dashboard.MonthlyTrend;
 import finance_management.dto.transaction.TransactionRequest;
 import finance_management.dto.transaction.TransactionResponse;
 import finance_management.enums.Category;
@@ -196,5 +197,21 @@ public class TransactionService {
         return transactions.map(TransactionMapper::toResponse);
 
     }
+
+//    public List<MonthlyTrend> getMonthlyTrend(int year) {
+//
+//        User user = userService.getCurrentUser();
+//
+//        List<Object[]> result =
+//                transactionRepo.getMonthlyTrend(user.getId(), year);
+//
+//        return result.stream()
+//                .map(row -> new MonthlyTrend(
+//                        Month.of(((Number) row[0]).intValue()),
+//                        (BigDecimal) row[1],
+//                        (BigDecimal) row[2]
+//                ))
+//                .toList();
+//    }
 
 }
