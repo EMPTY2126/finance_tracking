@@ -77,4 +77,17 @@ public class securityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+   @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                    .allowedOrigins("https://localhost:5173") // no wildcard — credentials require an explicit origin
+                    .allowedMethods("GET", "POST", "PUT", "DELETE")
+                    .allowCredentials(true);
+            }
+        };
+    }
+
 }
