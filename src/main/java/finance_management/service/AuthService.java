@@ -8,14 +8,17 @@ import finance_management.mapper.UserMapper;
 import finance_management.model.User;
 import finance_management.repo.UserRepo;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -68,6 +71,25 @@ public class AuthService {
         }
 
         return "Login Faild";
+    }
+
+    public String logout(HttpServletRequest req , HttpServletResponse res){
+        String userEmail = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
+        User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not logged in", HttpStatus.NOT_FOUND));
+        Cookie[] cookies = req.getCookies();
+        Cookie jwtCookie = null;
+        for(Cookie cookie : cookies ){
+            if(cookie.getName().equals("jwt"))
+                jwtCookie = cookie;
+        }
+        if(jwtCookie == null) return "User is not logged in";
+        jwtCookie.setValue("");
+        jwtCookie.setMaxAge(0);
+        jwtCookie.setPath("/");
+        jwtCookie.setHttpOnly(true);
+        res.addCookie(jwtCookie);
+
+        return "Logged out successfully";
     }
 
 }

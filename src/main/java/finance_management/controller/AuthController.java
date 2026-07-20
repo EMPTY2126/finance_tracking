@@ -4,6 +4,7 @@ import finance_management.dto.user.UserRequest;
 import finance_management.dto.user.UserResponse;
 import finance_management.model.User;
 import finance_management.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,15 +28,11 @@ public class AuthController {
         return authService.registerUser(user);
     }
 
-    @PostMapping("/logout")
-    public String logout(HttpServletResponse response) {
-       Cookie cookie = new Cookie("jwt", null);
-       cookie.setHttpOnly(true);
-       cookie.setPath("/");
-       cookie.setMaxAge(0);
-       response.addCookie(cookie);
-       return "Logged out";
+    @GetMapping("/logout")
+    public String getLogout(HttpServletRequest request, HttpServletResponse response){
+        return authService.logout(request, response);
     }
+
 
 
 }
